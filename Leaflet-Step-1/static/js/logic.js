@@ -21,6 +21,9 @@ function getTheColor(magnitude) {
   else if (magnitude > 3 & magnitude < 4) {
     color = "#1D9A6C";
   }
+  else if (magnitude > 4 & magnitude < 5) {
+    color = "#137177";
+  }
   else {
     color = "#0A2F51";
   }
@@ -56,7 +59,7 @@ function createMap(earthquakes) {
   var comicmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
-    id: "mapbox.comic",
+    id: "mapbox.streets",
     accessToken: MapBox_API_KEY
   });
 
@@ -69,7 +72,7 @@ function createMap(earthquakes) {
 
   // Define a baseMaps object to hold our base layers
   var baseMaps = {
-    "Comic Map": comicmap,
+    "Light Map": comicmap,
     "Dark Map": darkmap
   };
 
@@ -93,4 +96,22 @@ function createMap(earthquakes) {
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+
+  // Set up the legend
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function() {
+    var div = L.DomUtil.create("div", "info legend");
+
+    div.innerHTML += "<h4>Earthquake Magnitude</h4>";
+    div.innerHTML += '<i style="background: #DEEDCF"></i><span>0-1</span><br>';
+    div.innerHTML += '<i style="background: #99D492"></i><span>1-2</span><br>';
+    div.innerHTML += '<i style="background: #39A96B"></i><span>2-3</span><br>';
+    div.innerHTML += '<i style="background: #1D9A6C"></i><span>3-4</span><br>';
+    div.innerHTML += '<i style="background: #137177"></i><span>4-5</span><br>';
+    div.innerHTML += '<i style="background: #0A2F51"></i><span>5+</span><br>';
+    return div;
+  };
+
+  // Adding legend to the map
+  legend.addTo(myMap);
 }
